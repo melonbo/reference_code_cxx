@@ -17,8 +17,7 @@ char av_ts_buff[AV_TS_MAX_STRING_SIZE] = { 0 };
 static void log_packet(const AVFormatContext* fmt_ctx, const AVPacket* pkt, const char* tag)
 {
     AVRational* time_base = &fmt_ctx->streams[pkt->stream_index]->time_base;
-    printf("============ %d time base %d/%d, %p\n", pkt->stream_index, time_base->num, time_base->den, fmt_ctx->streams[pkt->stream_index]);
-    printf("%s: stream %d pts:%s pts_time:%s dts:%s dts_time:%s duration:%s duration_time:%s stream_index:%d\n",
+    printf("%s: pts:%s pts_time:%s dts:%s dts_time:%s duration:%s duration_time:%s stream_index:%d\n",
            tag,
            av_ts2str(pkt->pts), av_ts2timestr(pkt->pts, time_base),
            av_ts2str(pkt->dts), av_ts2timestr(pkt->dts, time_base),
