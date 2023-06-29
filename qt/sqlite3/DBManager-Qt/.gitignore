@@ -1,0 +1,13 @@
+*.obj
+*.sdf
+.DS_Store
+*.pro.user
+win32/
+/*.suo
+/lib
+/Debug
+/Release
+/DBManager/Release
+/DBManager/Debug
+/DBManager/bin/*.pdb
+/*.user
