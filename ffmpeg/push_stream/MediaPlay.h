@@ -35,6 +35,8 @@ public:
 	int PlayMeida(const char *name);
     void findMediaFiles(string path);
 	bool InitService(string pathName_,string destName_,BS_MediaCallback pDataCallBack);
+    void setMediaItemCallback(void* pDataCallBack){setMediaItem = (BS_MediaCallback)pDataCallBack;}
+    void setCurrentMediaItem(int item);
 
 private:
 	static bool playFlag;
@@ -47,6 +49,9 @@ private:
 	bool netPlayState ;
 	string mPathName;
 	string mDestName;
+    BS_MediaCallback setMediaItem = 0;
+    int currentMediaItem = 0;
+    bool playNextMediaItem = false;
 };
 
 #endif /* SRC_MEDIA_MEDIAPLAY_H_ */

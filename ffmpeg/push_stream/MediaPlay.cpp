@@ -13,7 +13,6 @@ bool MediaPlay::stopFlag = false;
 unsigned char MediaPlay::playModel = false;
 
 MediaPlay::MediaPlay() {
-	// TODO Auto-generated constructor stub
 	localPlayState = false;
 	netPlayState = false;
 }
@@ -34,7 +33,7 @@ int MediaPlay::PlayMeida(const char *name)
 	AVRational rate;
 	AVFormatContext *ifmt_ctx = NULL;
 	int audio_stream_index = -1;
-	int vedio_stream_index = -1;
+    int video_stream_index = -1;
 	AVPacket *packet = NULL;
 	AVFrame *frame = NULL;
 	AVStream *in_stream = NULL;
@@ -42,10 +41,8 @@ int MediaPlay::PlayMeida(const char *name)
 	AVCodec *codec = NULL;
 	AVFormatContext *ofmt_ctx =NULL;
 	int64_t start_time_relative = 0;
-	int got_frame;//接收解码结果
-	int index = 0;
-    //mFileObj.SetCurrentDir(mPathName.c_str());
-//	char inputName[100] = "1.mkv"; //= (*(input.begin())).c_str();
+
+
 	av_register_all();
 	avformat_network_init();
 	//申请avformatcontext
@@ -71,7 +68,7 @@ int MediaPlay::PlayMeida(const char *name)
 	}
 	av_dump_format(ifmt_ctx,0,name,0);
 
-	printf("-----ifmt_ctx = %d  number = %d\n",ifmt_ctx->streams[0]->codecpar->codec_id,ifmt_ctx->nb_streams);
+    printf("ifmt_ctx codec id = %d, streams number = %d\n",ifmt_ctx->streams[0]->codecpar->codec_id,ifmt_ctx->nb_streams);
 	//找到最好的音频流的索引
 
 	audio_stream_index = av_find_best_stream(ifmt_ctx,AVMEDIA_TYPE_AUDIO,-1,-1,NULL,0);
@@ -84,22 +81,15 @@ int MediaPlay::PlayMeida(const char *name)
 	printf("audio_stream_index = %d\n",audio_stream_index);
 
 
-	vedio_stream_index = av_find_best_stream(ifmt_ctx,AVMEDIA_TYPE_VIDEO,-1,-1,NULL,0);
-	if (vedio_stream_index == -1)
+    video_stream_index = av_find_best_stream(ifmt_ctx,AVMEDIA_TYPE_VIDEO,-1,-1,NULL,0);
+    if (video_stream_index == -1)
 	{
-		printf("fail to find the vedio stream\n");
+        printf("fail to find the video stream\n");
 		ret = -5;
 		goto end;
 	}
-	printf("vedio_stream_index = %d\n",vedio_stream_index);
-	//		//获取解码器
-	//		AVCodecContext *codec_ctx = avcodec_alloc_context3(NULL);
-	//		avcodec_parameters_to_context(codec_ctx, ifmt_ctx->streams[audio_stream_index]->codecpar);
-	//		AVCodec *codec = avcodec_find_decoder(codec_ctx->codec_id);
-	//		//打开解码器
-	//		if (avcodec_open2(codec_ctx, codec, NULL) < 0) {
-	//			return -4;
-	//		}
+    printf("video_stream_index = %d\n",video_stream_index);
+
 	//分配AVPacket和AVFrame内存，用于接收音频数据，解码数据
 	packet = av_packet_alloc();
 	if(!packet)
@@ -121,11 +111,6 @@ int MediaPlay::PlayMeida(const char *name)
 		ret = -7;
 		goto end;
 	}
-//	if(avformat_alloc_output_context2(&ofmt_ctx, NULL, "rtp_mpegts", "rtp://172.16.7.1:8010") < 0)
-//	{
-//		goto end;
-//	}
-	//avformat_alloc_output_context2(&ofmt_ctx, NULL, "mpegts", mDestName.c_str());
 
 	if(avformat_alloc_output_context2(&ofmt_ctx, NULL, "mpegts", mDestName.c_str()) < 0)
 	{
@@ -172,7 +157,6 @@ int MediaPlay::PlayMeida(const char *name)
 		}
 	}
 	if (avio_open(&ofmt_ctx->pb, mDestName.c_str(), AVIO_FLAG_WRITE) < 0) {
-	//if (avio_open(&ofmt_ctx->pb, "udp://239.255.0.10:8010", AVIO_FLAG_WRITE) < 0) {
 		printf("Could not open output URL '%s'", mDestName.c_str());
 		ret = -13;
 		goto end;
@@ -184,25 +168,12 @@ int MediaPlay::PlayMeida(const char *name)
 		goto end;
 	}
 
-	//av_dump_format(ofmt_ctx,0,"udp://239.255.0.10:8010",1);
 	av_dump_format(ofmt_ctx,0,mDestName.c_str(),1);
 	start_time_relative=av_gettime_relative();
-	while (av_read_frame(ifmt_ctx, packet) == 0) {//将音频数据读入packet
-
-
-		//			if (packet->stream_index == audio_stream_index) {//取音频索引packet
-		//				if (avcodec_decode_audio4(codec_ctx, frame, &got_frame, packet) <
-		//						0) {//将packet解码成AVFrame
-		//					break;
-		//				}
-		//				if (got_frame > 0) {
-		//					//printf("read a packet\n");
-		//				}
-		//			}
-
-		if (packet->stream_index == vedio_stream_index) {
+    while (av_read_frame(ifmt_ctx, packet) == 0) {//将音频数据读入packet
+        if (packet->stream_index == video_stream_index) {
 			//printf("*****************************************\n");
-			AVRational time_base = ifmt_ctx->streams[vedio_stream_index]->time_base;
+            AVRational time_base = ifmt_ctx->streams[video_stream_index]->time_base;
 			AVRational time_base_q = { 1,AV_TIME_BASE };
 			int64_t pts_time = av_rescale_q(packet->dts, time_base, time_base_q);
 
@@ -213,8 +184,6 @@ int MediaPlay::PlayMeida(const char *name)
 				av_usleep(pts_time - now_time);
 				//printf("time=%d\n",(pts_time - now_time));
 			}
-//			printf("-----packet = %d ptk-time = %d pts_time = %d now_time = %d\n",
-//					packet->dts,ifmt_ctx->streams[packet->stream_index]->time_base.den,pts_time,now_time);
 		}
 		in_stream = ifmt_ctx->streams[packet->stream_index];
 		out_stream = ofmt_ctx->streams[packet->stream_index];
@@ -226,15 +195,15 @@ int MediaPlay::PlayMeida(const char *name)
 //									packet->dts,ifmt_ctx->streams[packet->stream_index]->time_base.den,in_stream->time_base,out_stream->time_base,packet->stream_index,__TIME__);
 		re = av_interleaved_write_frame(ofmt_ctx, packet);
 		if (re < 0) {
-			printf("Error muxing packet\n");
+            printf("Error muxing packet, ret %d, errno %d\n", re, errno);
+            printf("packet stream_index %d, pts %lld, dts %lld\n", packet->stream_index, packet->pts, packet->dts);
 			ret = -14;
 			goto end;
 		}
 		av_free_packet(packet);
 
 	}
-	//printf("end the play\n");
-	//av_packet_unref(packet);
+
 	end:
 	if(packet) av_free_packet(packet);
 	if(frame) av_frame_free(&frame);
@@ -243,27 +212,11 @@ int MediaPlay::PlayMeida(const char *name)
 	return ret;
 }
 
-void MediaPlay::findMediaFiles(string path)
-{
-    DIR* dir;
-    struct dirent* entry;
-
-    if ((dir = opendir(path.c_str())) != nullptr) {
-        while ((entry = readdir(dir)) != nullptr) {
-            if (entry->d_type == DT_REG) {  // 判断是否为普通文件
-                mVeterFile.push_back(path+entry->d_name);
-            }
-        }
-        closedir(dir);
-    }
-}
 
 bool MediaPlay::InitService(string pathName_,string destName_,BS_MediaCallback pDataCallBack)
 {
-	mDestName = destName_;
-	mPathName = pathName_;
-
-    findMediaFiles(pathName_);
+    mPathName = pathName_;
+    mDestName = destName_;
 
 	if(!this->IsRun())
 	{
@@ -276,28 +229,12 @@ bool MediaPlay::InitService(string pathName_,string destName_,BS_MediaCallback p
 	return true;
 }
 
+
 void MediaPlay::ThreadProc(void)
 {
-	while(this->IsRun())
+    while(this->IsRun())//循环播放模式
 	{
-		//local
-		if(playModel == 0)
-		{
-            for(std::vector<std::string>::iterator it= mVeterFile.begin();it != mVeterFile.end();it++)
-			{
-				if(localPlayState)
-				{
-                    if(PlayMeida(((*it).c_str())))
-						localPlayState = true;
-					usleep(1000*1000);
-				}
-			}
-		}
-		//net
-		else
-		{
-			usleep(100*1000);
-		}
-
+        PlayMeida(mPathName.c_str());
+        usleep(100*1000);
 	}
 }
