@@ -12,6 +12,11 @@
 #include <cctype>
 #include <algorithm>
 
+#include <cstdarg>
+#include <string.h>
+#include <sys/param.h>
+#include <sys/types.h>
+
 
 bool fileExists(const std::string& filePath);//文件是否存在
 bool createDirectory(const std::string& directoryPath);//创建目录
@@ -31,5 +36,11 @@ std::string readFile(const std::string& filePath);//读取文件的内容
 bool writeFile(const std::string& filePath, const std::string& content);//写入内容到文件
 std::string trim(const std::string& str);//将给定字符串前后的空格去除
 std::vector<std::string> split(const std::string& str, char delimiter);//将给定的字符串按照指定的分隔符进行分割
+
+
+void mprintf(const char* fmt, ...);//重新封装printf，例如记录日志
+void printArray(unsigned char* data, int size);//打印数组数据
+void setBit(char *c, int offset, bool flag);//设置输入字节某一位的值
+bool getBit(char c, int offset);//获取输入字节某一位的值
 
 #endif // FILE_UTILS_H

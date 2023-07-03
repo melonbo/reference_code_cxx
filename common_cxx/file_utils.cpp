@@ -295,3 +295,50 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
 
     return tokens;
 }
+
+void mprintf(const char *fmt, ...)
+{
+    char myprintf_buf[1024];
+    va_list args;
+    int n;
+
+    va_start(args, fmt);
+    n = vsnprintf(myprintf_buf, sizeof(myprintf_buf), fmt, args);
+    va_end(args);
+
+    if(myprintf_buf[strlen(myprintf_buf)-1] == '\n')
+        myprintf_buf[strlen(myprintf_buf)-1] = '\0';
+
+    printf("%s\n", myprintf_buf);
+    //LOG4CPLUS_INFO(Logger::getRoot(), myprintf_buf);
+}
+
+#define PRINT_DATA_SIZE 1024
+void printArray(unsigned char* data, int size){
+    char buf[PRINT_DATA_SIZE];
+    sprintf(buf, "data size %d, content : ", size);
+    int len = strlen(buf);
+    for(int i=0; i<size; i++)
+    {
+        sprintf(&buf[len+i*3], " %02x", data[i]);
+    }
+
+    mprintf("%s\n", buf);
+}
+
+void setBit(char *c, int offset, bool flag)
+{
+    if(flag)
+    {
+        *c |= (0x01<<offset);
+    }
+    else
+    {
+        *c &= ~(0x01<<offset);
+    }
+}
+
+bool getBit(char c, int offset)
+{
+    return c & (0x01<<offset);
+}
