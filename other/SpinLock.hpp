@@ -1,9 +1,6 @@
 #ifndef _SPIN_LOCK_HPP
 #define _SPIN_LOCK_HPP
 
-#include "GlobalSet.hpp"
-
-// BEGIN_NAMESPACE(my_app)
 
 class SpinLock
 {
@@ -72,7 +69,5 @@ private:
     spin_lock_type&   m_lock;
 };
 
-
-// END_NAMESPACE(my_app)
 
 #endif
