@@ -1,17 +1,13 @@
 /*
  * MutexLock.hpp
  *
- * linux Mutex Wrapper by C++03/98
- *
- *  Created on: 2020-08-12
- *  Author: Songwei Yu
  */
 #ifndef _MUTEX_LOCK_HPP
 #define _MUTEX_LOCK_HPP
 
 #include <pthread.h>
 
-class MutexLock //final
+class MutexLock 
 {
 public:
     MutexLock()
