@@ -313,6 +313,28 @@ void mprintf(const char *fmt, ...)
     //LOG4CPLUS_INFO(Logger::getRoot(), myprintf_buf);
 }
 
+void setPrintDevice()
+{
+    int fd;
+    time_t cur_time;
+    struct tm *local_time;
+    cur_time = time(NULL);
+    local_time = localtime(&cur_time);
+
+    char logName[100]={0};
+    sprintf(logName, "/userdata/log/%04d%02d%02d/printf.log", local_time->tm_year+1900, local_time->tm_mon+1, local_time->tm_mday);
+    printf("log name is %s\n", logName);
+
+
+    if((fd=open(logName, O_WRONLY|O_CREAT|O_APPEND)))
+    {
+        dup2(fd, STDOUT_FILENO);
+        dup2(fd, STDERR_FILENO);
+        printf("\n\n\n%04d-%02d-%02d %02d:%02d:%02d \nstart recording printf message ...\n", local_time->tm_year+1900, local_time->tm_mon+1, local_time->tm_mday, local_time->tm_hour, local_time->tm_min, local_time->tm_sec);
+    }
+}
+
+
 #define PRINT_DATA_SIZE 1024
 void printArray(unsigned char* data, int size){
     char buf[PRINT_DATA_SIZE];

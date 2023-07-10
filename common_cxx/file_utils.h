@@ -11,7 +11,7 @@
 #include <unistd.h>
 #include <cctype>
 #include <algorithm>
-
+#include <fcntl.h>
 #include <cstdarg>
 #include <string.h>
 #include <sys/param.h>
@@ -39,6 +39,7 @@ std::vector<std::string> split(const std::string& str, char delimiter);//将给�
 
 
 void mprintf(const char* fmt, ...);//重新封装printf，例如记录日志
+void setPrintDevice();//printf输出重定向
 void printArray(unsigned char* data, int size);//打印数组数据
 void setBit(char *c, int offset, bool flag);//设置输入字节某一位的值
 bool getBit(char c, int offset);//获取输入字节某一位的值
