@@ -85,6 +85,7 @@ int  getLocalEthernetInfo(void);//获取设备网卡信息
 int  get_local_ip(const char *eth_inf, char *ip);//根据网卡名称获取IP地址
 void regitsterInterrupt();//注册系统中断处理函数
 int isNetworkPortOpened(int port);//判断一个端口是否打开
+void initDaemon();//设置守护进程
 
 bool get_cpu_occupy(cpu_info_t *info);
 double calc_cpu_rate(cpu_info_t *old_info, cpu_info_t *new_info);
