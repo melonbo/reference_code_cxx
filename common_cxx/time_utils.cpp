@@ -58,3 +58,14 @@ unsigned int getFormatSeconds(char year, char mon, char day, char hour, char min
 
     return mktime(&formatTime);
 }
+
+void printTime()
+{
+    time_t timer;
+    struct tm* t_tm;
+    time(&timer);
+    t_tm = localtime(&timer);
+    printf("%4d-%02d-%02d %02d:%02d:%02d\n",
+           t_tm->tm_year+1900, t_tm->tm_mon+1, t_tm->tm_mday,
+           t_tm->tm_hour, t_tm->tm_min, t_tm->tm_sec);
+}
