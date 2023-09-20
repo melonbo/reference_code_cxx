@@ -50,7 +50,6 @@ SOURCES += main.cpp \
     onvif/duration.cpp \
     onvif/dom.cpp \
     onvif/CameraConfig.cpp \
-    config/test.cpp \
     log/Log4c.cpp \
     onvif/onvif_comm.c \
     onvif/onvif_dump.c

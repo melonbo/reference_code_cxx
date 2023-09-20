@@ -1,6 +1,5 @@
 //#include <QCoreApplication>
 #include "log/Log4c.h"
-#include <config/platform.h>
 #include "onvif/CameraConfig.h"
 #include <getopt.h>
 #include <sstream>
