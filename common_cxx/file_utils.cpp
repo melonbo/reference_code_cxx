@@ -110,6 +110,32 @@ bool copyFile(const std::string& file_src, const std::string& file_dst) {
     return true;
 }
 
+bool copyFile_02(const std::string& file_src, const std::string& file_dst) {
+    std::ifstream src(file_src, std::ios::binary);
+    std::ofstream dst(file_dst, std::ios::binary);
+
+    if (!src.is_open()) {
+        std::cerr << "Failed to open" << file_src << std::endl;
+        return false;
+    }else{
+        if (!dst.is_open()) {
+            std::cerr << "Failed to open " << file_dst << std::endl;
+            src.close();
+            return false;
+        }else{
+            // 逐行将源文件内容写入目标文件
+            std::string line;
+            while (std::getline(src, line)) {
+                dst << line << '\n';
+            }
+            // 关闭源文件
+            src.close();
+            dst.close();
+            return true;
+        }
+    }
+}
+
 bool moveFile(const std::string& file_src, const std::string& file_dst) {
     if (std::rename(file_src.c_str(), file_dst.c_str()) == 0) {
         return true;
@@ -243,6 +269,22 @@ std::string readFile(const std::string& filePath) {
     }
 }
 
+std::vector <std::string> readFile_02(const std::string& filePath) {
+    std::ifstream file(filePath);
+    std::vector<std::string> lines;
+
+    if (file.is_open()) {
+        std::string line;
+        while (std::getline(file, line)) {
+            lines.push_back(line);
+        }
+        file.close();
+    } else {
+        printf("open file %s failed\n", filePath.c_str());
+    }
+    return lines;
+}
+
 bool writeFile(const std::string& filePath, const std::string& content) {
     std::ofstream file(filePath);
 
@@ -254,6 +296,44 @@ bool writeFile(const std::string& filePath, const std::string& content) {
     } else {
         return false;
     }
+}
+
+//usage: mergeFiles("out.txt", {"1.txt", "2.txt", "3.txt"});
+void mergeFiles(const std::string& outputFileName, const std::initializer_list<std::string>& inputFiles) {
+    // 打开目标文件以输出方式
+    std::fstream outFile(outputFileName, std::ios::out);
+
+    // 检查文件是否成功打开
+    if (!outFile.is_open()) {
+        std::cerr << "Failed to open the output file for writing!" << std::endl;
+        return;
+    }
+
+    // 遍历需要合并的文件列表
+    for (const std::string& inputFile : inputFiles) {
+        // 打开源文件以输入方式
+        std::ifstream inFile(inputFile);
+
+        // 检查文件是否成功打开
+        if (!inFile.is_open()) {
+            std::cerr << "Failed to open " << inputFile << " for reading." << std::endl;
+            return;
+        }
+
+        // 逐行将源文件内容写入目标文件
+        std::string line;
+        while (std::getline(inFile, line)) {
+            outFile << line << '\n';
+        }
+
+        // 关闭源文件
+        inFile.close();
+    }
+
+    // 关闭目标文件
+    outFile.close();
+
+    std::cout << "Files merged successfully." << std::endl;
 }
 
 std::string trim(const std::string& str) {
@@ -294,6 +374,63 @@ std::vector<std::string> split(const std::string& str, char delimiter) {
     }
 
     return tokens;
+}
+
+int countDirectories(const std::string& path, const std::string& datePattern) {
+    int count = 0;
+    DIR* dir = opendir(path.c_str());
+    if (dir == nullptr) {
+        std::cerr << "Failed to open directory: " << path << std::endl;
+        return count;
+    }
+
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != nullptr) {
+        std::string name = entry->d_name;
+
+        if (name != "." && name != "..") {
+            std::string fullPath = path + "/" + name;
+            struct stat fileInfo;
+            if (stat(fullPath.c_str(), &fileInfo) == 0) {
+                if (S_ISDIR(fileInfo.st_mode)) {
+                    // 检查文件夹名称是否匹配指定日期格式
+                    if (name.size() == datePattern.size() && name.find_first_not_of("0123456789") == std::string::npos) {
+                        count++;
+                    }
+
+                    // 递归检索子目录
+                    count += countDirectories(fullPath, datePattern);
+                }
+            }
+        }
+    }
+
+    closedir(dir);
+    return count;
+}
+
+int createSymbolicLink(const char* targetPath, const char* linkPath) {
+    if (remove(linkPath) == 0){
+        printf("remove file %s\n", linkPath);
+    }
+    else{
+        printf("remove file %s failed, errno %d\n", linkPath, errno);
+    }
+
+    if (-1 == symlink(targetPath, linkPath)) {
+        // 创建链接文件失败
+        perror("symlink");
+        return -1;
+    }
+    return 0;
+}
+
+bool hasExtension(const std::string& filename, const std::string& extension) {
+    size_t dotPos = filename.find_last_of('.');
+    if (dotPos != std::string::npos && filename.substr(dotPos + 1) == extension) {
+        return true;  // 文件具有指定的后缀名
+    }
+    return false;  // 文件没有指定的后缀名
 }
 
 void mprintf(const char *fmt, ...)
@@ -364,3 +501,4 @@ bool getBit(char c, int offset)
 {
     return c & (0x01<<offset);
 }
+

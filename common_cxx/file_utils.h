@@ -23,6 +23,7 @@ bool createDirectory(const std::string& directoryPath);//创建目录
 bool removeDirectory(const std::string& directoryPath);//递归删除目录
 bool removeDirectoryFiles(const std::string& directoryPath);//删除目录下文件
 bool copyFile(const std::string& file_src, const std::string& file_dst);//复制文件
+bool copyFile_02(const std::string& file_src, const std::string& file_dst);//复制文件
 bool moveFile(const std::string& file_src, const std::string& file_dst);//移动文件
 std::streampos getFileSize(const std::string& filePath);//获取文件大小
 std::vector<std::string> getFilesInDirectory(const std::string& directoryPath);//获取目录下所有文件
@@ -33,9 +34,14 @@ std::string getParentDirectory(const std::string& filePath);//获取父目录路
 std::string joinPaths(const std::string& path1, const std::string& path2);//将两个路径组合成一个新的路径
 std::string getCurrentDirectory();//获取当前工作目录
 std::string readFile(const std::string& filePath);//读取文件的内容
+std::vector <std::string> readFile_02(const std::string& filePath);//读取文件的内容
 bool writeFile(const std::string& filePath, const std::string& content);//写入内容到文件
+void mergeFiles(const std::string& outputFileName, const std::initializer_list<std::string>& inputFiles);//合并文件
 std::string trim(const std::string& str);//将给定字符串前后的空格去除
 std::vector<std::string> split(const std::string& str, char delimiter);//将给定的字符串按照指定的分隔符进行分割
+int countDirectories(const std::string& path, const std::string& datePattern);//检索目录path下符合yyyymmdd日期格式的文件夹的数量
+int createSymbolicLink(const char* targetPath, const char* linkPath);//创建链接文件
+bool hasExtension(const std::string& filename, const std::string& extension);//判断文件后缀
 
 
 void mprintf(const char* fmt, ...);//重新封装printf，例如记录日志
