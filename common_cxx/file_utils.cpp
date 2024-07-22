@@ -502,3 +502,42 @@ bool getBit(char c, int offset)
     return c & (0x01<<offset);
 }
 
+uintmax_t getFileSize(const std::string& filePath) {
+    struct stat statBuf;
+    if (stat(filePath.c_str(), &statBuf) == 0) {
+        return statBuf.st_size;
+    }
+    return 0;
+}
+
+uintmax_t getFolderSize(const std::string& folderPath) {
+    uintmax_t folderSize = 0;
+    DIR* dir = opendir(folderPath.c_str());
+    if (dir == nullptr) {
+        std::cerr << "Could not open directory: " << folderPath << std::endl;
+        return 0;
+    }
+
+    struct dirent* entry;
+    while ((entry = readdir(dir)) != nullptr) {
+        std::string fileName = entry->d_name;
+
+        // Skip "." and ".."
+        if (fileName == "." || fileName == "..") {
+            continue;
+        }
+
+        std::string fullPath = folderPath + "/" + fileName;
+
+        if (entry->d_type == DT_DIR) {
+            // Recursively get size for subdirectory
+            folderSize += getFolderSize(fullPath);
+        } else if (entry->d_type == DT_REG) {
+            // Get size for regular file
+            folderSize += getFileSize(fullPath);
+        }
+    }
+
+    closedir(dir);
+    return folderSize;
+}
