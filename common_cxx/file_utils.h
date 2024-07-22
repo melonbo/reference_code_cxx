@@ -43,7 +43,7 @@ int countDirectories(const std::string& path, const std::string& datePattern);//
 int createSymbolicLink(const char* targetPath, const char* linkPath);//创建链接文件
 bool hasExtension(const std::string& filename, const std::string& extension);//判断文件后缀
 uintmax_t getFileSize(const std::string& filePath);//获取文件大小
-uintmax_t getFolderSize(const std::string& folderPath);//获取文件夹大小
+uintmax_t getFolderSize(const std::string& folderPath);// 获取文件夹大小
 
 
 void mprintf(const char* fmt, ...);//重新封装printf，例如记录日志
