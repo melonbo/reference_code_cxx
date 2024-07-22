@@ -32,7 +32,7 @@ std::string getFileName(const std::string& filePath);//获取文件名,不包括
 std::string getBaseName(const std::string& filePath);//获取文件名,包括扩展名
 std::string getParentDirectory(const std::string& filePath);//获取父目录路径（不包括斜杠）
 std::string joinPaths(const std::string& path1, const std::string& path2);//将两个路径组合成一个新的路径
-std::string getCurrentDirectory();//获取当前工作目录
+std::string getCurrentDirectory();//获取当前工作目录 
 std::string readFile(const std::string& filePath);//读取文件的内容
 std::vector <std::string> readFile_02(const std::string& filePath);//读取文件的内容
 bool writeFile(const std::string& filePath, const std::string& content);//写入内容到文件
