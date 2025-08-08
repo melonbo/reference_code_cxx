@@ -34,7 +34,7 @@ std::string getFileName(const std::string& filePath);//获取文件名,不包括
 std::string getBaseName(const std::string& filePath);//获取文件名,包括扩展名
 std::string getParentDirectory(const std::string& filePath);//获取父目录路径（不包括斜杠）
 std::string joinPaths(const std::string& path1, const std::string& path2);//将两个路径组合成一个新的路径
-std::string getCurrentDirectory();//获取当前工作目录
+std::string getCurrentDirectory();//获取当前工作目录 
 std::string readFile(const std::string& filePath);//读取文件的内容
 std::vector <std::string> readFile_02(const std::string& filePath);//读取文件的内容
 bool writeFile(const std::string& filePath, const std::string& content);//写入内容到文件
@@ -44,6 +44,8 @@ std::vector<std::string> split(const std::string& str, char delimiter);//将给�
 int countDirectories(const std::string& path, const std::string& datePattern);//检索目录path下符合yyyymmdd日期格式的文件夹的数量
 int createSymbolicLink(const char* targetPath, const char* linkPath);//创建链接文件
 bool hasExtension(const std::string& filename, const std::string& extension);//判断文件后缀
+uintmax_t getFileSize(const std::string& filePath);//获取文件大小
+uintmax_t getFolderSize(const std::string& folderPath);// 获取文件夹大小
 
 
 void mprintf(const char* fmt, ...);//重新封装printf，例如记录日志
