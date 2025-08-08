@@ -20,6 +20,8 @@
 
 bool fileExists(const std::string& filePath);//文件是否存在
 bool createDirectory(const std::string& directoryPath);//创建目录
+bool folderExists(const std::string& folderPath);//判断文件夹是否存在
+bool createFolder(const std::string& folderPath);//创建文件夹
 bool removeDirectory(const std::string& directoryPath);//递归删除目录
 bool removeDirectoryFiles(const std::string& directoryPath);//删除目录下文件
 bool copyFile(const std::string& file_src, const std::string& file_dst);//复制文件

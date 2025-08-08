@@ -16,6 +16,15 @@ bool createDirectory(const std::string& directoryPath) {
     }
 }
 
+bool folderExists(const std::string& folderPath) {
+    struct stat info;
+    return stat(folderPath.c_str(), &info) == 0 && S_ISDIR(info.st_mode);
+}
+
+bool createFolder(const std::string& folderPath) {
+    return mkdir(folderPath.c_str(), S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH) == 0;
+}
+
 bool removeDirectory(const std::string& directoryPath) {
     DIR* dir = opendir(directoryPath.c_str());
     if (dir == NULL) {
