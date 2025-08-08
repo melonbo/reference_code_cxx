@@ -1,7 +1,7 @@
 ### 调用关系
 `VideoPlayer::startPlay`
 
-```
+```mermaid
 flowchart TD
     A[开始] --> B[配置期望音频参数]
     B --> C[获取音频设备数量]
