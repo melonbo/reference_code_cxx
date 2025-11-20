@@ -16,8 +16,9 @@
 #include <string.h>
 #include <sys/param.h>
 #include <sys/types.h>
+#include <random>
 
-
+//文件操作
 bool fileExists(const std::string& filePath);//文件是否存在
 bool createDirectory(const std::string& directoryPath);//创建目录
 bool folderExists(const std::string& folderPath);//判断文件夹是否存在
@@ -39,19 +40,22 @@ std::string readFile(const std::string& filePath);//读取文件的内容
 std::vector <std::string> readFile_02(const std::string& filePath);//读取文件的内容
 bool writeFile(const std::string& filePath, const std::string& content);//写入内容到文件
 void mergeFiles(const std::string& outputFileName, const std::initializer_list<std::string>& inputFiles);//合并文件
-std::string trim(const std::string& str);//将给定字符串前后的空格去除
-std::vector<std::string> split(const std::string& str, char delimiter);//将给定的字符串按照指定的分隔符进行分割
 int countDirectories(const std::string& path, const std::string& datePattern);//检索目录path下符合yyyymmdd日期格式的文件夹的数量
 int createSymbolicLink(const char* targetPath, const char* linkPath);//创建链接文件
 bool hasExtension(const std::string& filename, const std::string& extension);//判断文件后缀
 uintmax_t getFileSize(const std::string& filePath);//获取文件大小
 uintmax_t getFolderSize(const std::string& folderPath);// 获取文件夹大小
 
-
+//字符串操作
+std::string trim(const std::string& str);//将给定字符串前后的空格去除
+std::vector<std::string> split(const std::string& str, char delimiter);//将给定的字符串按照指定的分隔符进行分割
+std::string generateRandomString(size_t minLen, size_t maxLen);//生成随机字符串
+	
+//其它
 void mprintf(const char* fmt, ...);//重新封装printf，例如记录日志
 void setPrintDevice();//printf输出重定向
 void printArray(unsigned char* data, int size);//打印数组数据
 void setBit(char *c, int offset, bool flag);//设置输入字节某一位的值
-bool getBit(char c, int offset);//获取输入字节某一位的值
+bool getBit(char c, int offset);//获取输入字节某一位的值	
 
 #endif // FILE_UTILS_H

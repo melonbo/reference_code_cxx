@@ -550,3 +550,23 @@ uintmax_t getFolderSize(const std::string& folderPath) {
     closedir(dir);
     return folderSize;
 }
+
+std::string generateRandomString(size_t minLen, size_t maxLen) {
+    static std::random_device rd;
+    static std::mt19937 gen(rd());
+
+    // 生成随机长度
+    std::uniform_int_distribution<size_t> lenDist(minLen, maxLen);
+    size_t length = lenDist(gen);
+
+    // 生成随机字符串
+    std::uniform_int_distribution<int> charDist(32, 126); // 可打印ASCII字符
+    std::string result;
+    result.reserve(length);
+
+    for (size_t i = 0; i < length; ++i) {
+        result.push_back(static_cast<char>(charDist(gen)));
+    }
+
+    return result;
+}
