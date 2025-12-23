@@ -104,4 +104,7 @@ int  getDiskVolumeTotalMB(char* path);//获取硬盘总容量，单位MB
 int  getDiskVolumeFreeMB(char* path);//获取硬盘空闲容量，单位MB
 int  getDiskVolumeUsedMB(char* path);//获取硬盘使用容量，单位MB
 
+bool setThreadAffinity(int i);//设置当前线程的 CPU 亲和性（即绑定线程到特定的 CPU 核心上）
+string getEnv(const string &key);//用于获取环境变量的值
+
 #endif // OS_UTILS_H

@@ -570,3 +570,92 @@ std::string generateRandomString(size_t minLen, size_t maxLen) {
 
     return result;
 }
+
+std::vector<std::string> split02(const std::string &s, const char *delim) {
+    vector<string> ret;
+    size_t last = 0;
+    auto index = s.find(delim, last);
+    while (index != string::npos) {
+        if (index - last > 0) {
+            ret.push_back(s.substr(last, index - last));
+        }
+        last = index + strlen(delim);
+        index = s.find(delim, last);
+    }
+    if (!s.size() || s.size() - last > 0) {
+        ret.push_back(s.substr(last));
+    }
+    return ret;
+}
+
+// string转小写  [AUTO-TRANSLATED:bf92618b]
+//Convert string to lowercase
+std::string strToLower(std::string &&str) {
+    transform(str.begin(), str.end(), str.begin(), towlower);
+    return std::move(str);
+}
+
+// string转大写  [AUTO-TRANSLATED:0197b884]
+//Convert string to uppercase
+std::string strToUpper(std::string &&str) {
+    transform(str.begin(), str.end(), str.begin(), towupper);
+    return std::move(str);
+}
+
+static constexpr char CCH[] = "0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ";
+
+string makeRandStr(int sz, bool printable) {
+    string ret;
+    ret.resize(sz);
+    std::mt19937 rng(std::random_device{}());
+    for (int i = 0; i < sz; ++i) {
+        if (printable) {
+            uint32_t x = rng() % (sizeof(CCH) - 1);
+            ret[i] = CCH[x];
+        } else {
+            ret[i] = rng() % 0xFF;
+        }
+    }
+    return ret;
+}
+
+bool is_safe(uint8_t b) {
+    return b >= ' ' && b < 128;
+}
+
+string hexdump(const void *buf, size_t len) {
+    string ret("\r\n");
+    char tmp[8];
+    const uint8_t *data = (const uint8_t *) buf;
+    for (size_t i = 0; i < len; i += 16) {
+        for (int j = 0; j < 16; ++j) {
+            if (i + j < len) {
+                int sz = snprintf(tmp, sizeof(tmp), "%.2x ", data[i + j]);
+                ret.append(tmp, sz);
+            } else {
+                int sz = snprintf(tmp, sizeof(tmp), "   ");
+                ret.append(tmp, sz);
+            }
+        }
+        for (int j = 0; j < 16; ++j) {
+            if (i + j < len) {
+                ret += (is_safe(data[i + j]) ? data[i + j] : '.');
+            } else {
+                ret += (' ');
+            }
+        }
+        ret += ('\n');
+    }
+    return ret;
+}
+
+string hexmem(const void *buf, size_t len) {
+    string ret;
+    char tmp[8];
+    const uint8_t *data = (const uint8_t *) buf;
+    for (size_t i = 0; i < len; ++i) {
+        int sz = sprintf(tmp, "%.2x ", data[i]);
+        ret.append(tmp, sz);
+    }
+    return ret;
+}

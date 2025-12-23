@@ -49,7 +49,14 @@ uintmax_t getFolderSize(const std::string& folderPath);// 获取文件夹大小
 //字符串操作
 std::string trim(const std::string& str);//将给定字符串前后的空格去除
 std::vector<std::string> split(const std::string& str, char delimiter);//将给定的字符串按照指定的分隔符进行分割
+std::vector<std::string> split02(const string &s, const char *delim);//将给定的字符串按照指定的分隔符进行分割
 std::string generateRandomString(size_t minLen, size_t maxLen);//生成随机字符串
+std::string strToLower(std::string &&str); // string转小写
+std::string strToUpper(std::string &&str); // string转大写
+string makeRandStr(int sz, bool printable); //根据指定长度和是否可打印的要求，生成一个随机字符串。
+string hexdump(const void *buf, size_t len); //用于在十六进制 dump 中显示对应的可打印字符，对于 “不安全” 的字符则显示为 .（点号）。
+string hexmem(const void *buf, size_t len); //将一段内存数据转换为十六进制字符串表示形式。
+	
 	
 //其它
 void mprintf(const char* fmt, ...);//重新封装printf，例如记录日志
